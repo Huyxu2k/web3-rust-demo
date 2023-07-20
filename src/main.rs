@@ -6,9 +6,10 @@ use web3::{
     contract::Contract,
     contract::Options,
     transports::Http,
-    types::{Address, RawTransaction, TransactionRequest, H160, U256},
+    types::{Address, RawTransaction, TransactionRequest, H160, U256, Transaction},
     Web3,
 };
+ // const 1ETH=1000000000000000000;
 #[tokio::main]
 async fn main() {
     //-> web3::Result<()>
@@ -26,19 +27,33 @@ async fn main() {
     let result = contract.query("printGreeting", (), None, Options::default(), None);
     let va: String = result.await.unwrap();
     // Get the result of the function call
-    println!("Value of Smart Contract Old: {}", va);
+    //println!("Value of Smart Contract Old: {}", va);
 
    
-     let account0=Address::from_str("0x1Bdd9f2578843a7C2E69967F0e608eC95b987C70").unwrap();
-    //Call function setGreeting on the contract
-    let greeting="Hello Huy".to_string();
-    let tx = contract.call("setGreeting", (greeting,), account0, Options::default()).await.unwrap();
-    println!("TxHash: {}", tx);
+    // let account0=Address::from_str("0x1Bdd9f2578843a7C2E69967F0e608eC95b987C70").unwrap();
+    ////Call function setGreeting on the contract
+    //let greeting="Hello Huy".to_string();
+    //let tx = contract.call("setGreeting", (greeting,), account0, Options::default()).await.unwrap();
+    //println!("TxHash: {}", tx);
 
-    let result1 = contract.query("printGreeting", (), None, Options::default(), None);
-    let va: String = result1.await.unwrap();
-    // Get the result of the function call
-    println!("Value of Smart Contract New: {}", va);
+    //let result1 = contract.query("printGreeting", (), None, Options::default(), None);
+    //let va: String = result1.await.unwrap();
+    //// Get the result of the function call
+    //println!("Value of Smart Contract New: {}", va);
+
+   
+    //transfer 3 Eth form "0x1Bdd9f2578843a7C2E69967F0e608eC95b987C70" to "0x53B61DbBF3a81f9b1a45F623bfF957Aa527ca083"
+    let tx_tran=TransactionRequest{
+        from:Address::from_str("0x1Bdd9f2578843a7C2E69967F0e608eC95b987C70").unwrap(),
+        to:Some(Address::from_str("0x53B61DbBF3a81f9b1a45F623bfF957Aa527ca083").unwrap()),
+        value:Some(U256::from(3000000000000000000 as i128)),
+        ..Default::default()
+    };
+    web3.eth().send_transaction(tx_tran).await.unwrap();
+
+    
+
+
     
     /*
     //     let mut accounts = web3.eth().accounts().await?;
